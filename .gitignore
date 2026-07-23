@@ -5,6 +5,14 @@ build/
 dist/
 wheels/
 *.egg-info
+.ruff_cache
 
 # Virtual environments
 .venv
+
+# Containerlab
+clab-*/
+*.clab.yml.bak
+
+# pyinfra
+pyinfra-debug.log

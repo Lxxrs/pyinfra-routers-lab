@@ -1,0 +1,4 @@
+{% for ns in host.data.get("nameservers", ["10.0.0.3"]) %}
+nameserver {{ ns }}
+{% endfor %}
+lookup file bind

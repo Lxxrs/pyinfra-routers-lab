@@ -1,0 +1,7 @@
+{% if cfg.description %}
+# {{ cfg.description }}
+{% endif %}
+inet {{ cfg.address }} {{ cfg.netmask }}
+{% for route in cfg.get("routes", []) %}
+!route add -net {{ route.destination }} {{ route.gateway }}
+{% endfor %}
