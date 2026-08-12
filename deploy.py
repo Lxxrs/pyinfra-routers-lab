@@ -37,11 +37,27 @@ for iface, cfg in host.data.get("interfaces", {}).items():
         _if=iface_file.did_change,
     )
 
-# Routing
+# IPv4 Forwarding
 server.sysctl(
     name="Enable IPv4 forwarding",
     key="net.inet.ip.forwarding",
     value=1,
     persist=True,
     persist_file="/etc/sysctl.conf",
+)
+
+# Packet Filter
+pf_conf = files.template(
+    name="Render pf ruleset",
+    src="templates/pf.conf.j2",
+    dest="/etc/pf.conf",
+    mode="600",
+    pf_rules=host.data.get("pf_rules", []),
+)
+
+server.shell(
+    name="Validate and load pf ruleset",
+    commands=["pfctl -nf /etc/pf.conf && pfctl -f /etc/pf.conf"],
+    _if=pf_conf.did_change,
+    _ignore_errors=False,
 )

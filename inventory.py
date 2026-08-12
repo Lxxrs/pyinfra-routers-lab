@@ -23,6 +23,7 @@ COMMON = {
         "tig",
         "unbound_exporter",
     ],
+    "pf_rules": [],
 }
 
 

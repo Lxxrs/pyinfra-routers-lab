@@ -1,0 +1,49 @@
+#       $OpenBSD: pf.conf,v 1.55 2017/12/03 20:40:04 sthen Exp $
+#
+# See pf.conf(5) and /etc/examples/pf.conf
+#
+# Managed by pyinfra — do not edit by hand.
+#
+# Host: {{ host.name }}
+
+# increase default state limit from 100'000 states on busy systems
+#set limit states 500000
+
+set skip on lo
+
+# filter rules and anchor for ftp-proxy(8)
+#anchor "ftp-proxy/*"
+#pass in quick inet proto tcp to port ftp divert-to 127.0.0.1 port 8021
+
+# anchor for relayd(8)
+#anchor "relayd/*"
+
+block return    # block stateless traffic
+pass            # establish keep-state
+
+# rules for spamd(8)
+#table <spamd-white> persist
+#table <nospamd> persist file "/etc/mail/nospamd"
+#pass in on egress inet proto tcp from any to any port smtp \
+#    divert-to 127.0.0.1 port spamd
+#pass in on egress proto tcp from <nospamd> to any port smtp
+#pass in log on egress proto tcp from <spamd-white> to any port smtp
+#pass out log on egress proto tcp to any port smtp
+
+
+#block in quick from urpf-failed to any # use with care
+
+# rules for vmd(8) - NAT and DNS forwarding for VMs (100.64.0.0/10 default)
+#pass out on egress from 100.64.0.0/10 to any nat-to (egress)
+#pass in proto udp from 100.64.0.0/10 to any port domain \
+#    rdr-to $dns_server port domain
+
+# By default, do not permit remote connections to X11
+block return in on ! lo0 proto tcp to port 6000:6010
+
+# Port build user does not need network
+block return out log proto {tcp udp} user _pbuild
+
+{% for rule in pf_rules %}
+{{ rule }}
+{% endfor %}
