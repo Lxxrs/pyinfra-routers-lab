@@ -3,8 +3,8 @@
 A reproducible lab that provisions **OpenBSD routers with [pyinfra](https://pyinfra.com/)**, running on
 [Containerlab](https://containerlab.dev/) so it can be spun up on any Linux machine with Docker.
 
-It is a public, runnable version of an apprenticeship project in which bare-metal OpenBSD routers
-were provisioned with pyinfra. The virtualised routers here are configured by exactly the same
+This is a public, runnable version of my apprenticeship project in which bare-metal OpenBSD routers
+are provisioned with pyinfra. The virtualised routers here are configured by exactly the same
 mechanism as the physical ones: agentless SSH, no state on the target, everything in version control.
 
 ## Topology
@@ -131,25 +131,27 @@ Router configuration is **data, not code**. Shared settings live in the group da
 
 ```python
 (
-    "clab-pyinfra-routers-lab-router1",
-    {
-        "interfaces": {
-            "vio1": {
-                "address": "192.168.1.1",
-                "netmask": "255.255.255.0",
-                "description": "LAN router1",
-            },
-            "vio2": {
-                "address": "10.10.8.1",
-                "netmask": "255.255.255.252",
-                "description": "transit to router2",
-                "routes": [
-                    {"destination": "192.168.2.0/24", "gateway": "10.10.8.2"},
-                ],
+    (
+        "clab-pyinfra-routers-lab-router1",
+        {
+            "interfaces": {
+                "vio1": {
+                    "address": "192.168.1.1",
+                    "netmask": "255.255.255.0",
+                    "description": "LAN router1",
+                },
+                "vio2": {
+                    "address": "10.10.8.1",
+                    "netmask": "255.255.255.252",
+                    "description": "transit to router2",
+                    "routes": [
+                        {"destination": "192.168.2.0/24", "gateway": "10.10.8.2"},
+                    ],
+                },
             },
         },
-    },
-),
+    ),
+)
 ```
 
 To add a third router: add the node and its links to the `.clab.yml`, add a host entry with its
