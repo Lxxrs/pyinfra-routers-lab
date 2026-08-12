@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "redhat.vscode-yaml",
+        "srl-labs.vscode-containerlab",
+        "charliermarsh.ruff",
+        "astral-sh.ty"
+    ]
+}
