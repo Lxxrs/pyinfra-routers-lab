@@ -100,6 +100,51 @@ sysctl net.inet.ip.forwarding
 sudo containerlab destroy -t pyinfra-routers-lab.clab.yml --cleanup
 ```
 
+## Dev
+
+### Audit dependencies for vulnerabilities
+
+```sh
+uv audit
+```
+
+### Install dev dependencies
+
+```sh
+uv sync --group dev
+```
+
+### Upgrade dependencies
+
+```sh
+uv lock --upgrade
+```
+
+### Lint
+
+```sh
+uv run ruff check .
+uv run ruff check . --fix
+```
+
+### Format
+
+```sh
+uv run ruff format .
+```
+
+### Typecheck
+
+```sh
+uv run ty check .
+```
+
+### Run all checks
+
+```sh
+uv run ruff check . && uv run ruff format . --check && uv run ty check .
+```
+
 ## What the deploy configures
 
 | Step | Result |
@@ -222,6 +267,18 @@ COMMON = {
 ```
 
 or drop passwords entirely in favour of key-based auth with `ssh_key`.
+
+## Further Docs
+
+- [Containerlab](https://containerlab.dev/)
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary)
+- [git-cliff](https://git-cliff.org/docs/)
+- [Python](https://docs.python.org/3/)
+- [pyinfra](https://docs.pyinfra.com/en/3.x/index.html)
+- [ruff](https://docs.astral.sh/ruff/)
+- [Semantic Versioning](https://semver.org/)
+- [ty](https://docs.astral.sh/ty/)
+- [uv](https://docs.astral.sh/uv/)
 
 ## Credits
 
