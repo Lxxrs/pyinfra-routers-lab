@@ -3,10 +3,10 @@ topology:
   nodes:
     router1:
       kind: openbsd
-      image: ghcr.io/dteslya/vrnetlab-images/openbsd-vrnetlab:7.8
+      image: codeberg.org/lxrs/openbsd-vrnetlab:8.0
     router2:
       kind: openbsd
-      image: ghcr.io/dteslya/vrnetlab-images/openbsd-vrnetlab:7.8
+      image: codeberg.org/lxrs/openbsd-vrnetlab:8.0
     client1:
       kind: "linux"
       image: wbitt/network-multitool:alpine-extra
