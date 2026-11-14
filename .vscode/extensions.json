@@ -3,6 +3,7 @@
         "redhat.vscode-yaml",
         "srl-labs.vscode-containerlab",
         "charliermarsh.ruff",
-        "astral-sh.ty"
+        "astral-sh.ty",
+        "vivaxy.vscode-conventional-commits"
     ]
 }
