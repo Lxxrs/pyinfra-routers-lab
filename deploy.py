@@ -50,14 +50,21 @@ server.sysctl(
 pf_conf = files.template(
     name="Render pf ruleset",
     src="templates/pf.conf.j2",
-    dest="/etc/pf.conf",
+    dest="/etc/pf.conf.new",
     mode="600",
     pf_rules=host.data.get("pf_rules", []),
 )
 
 server.shell(
     name="Validate and load pf ruleset",
-    commands=["pfctl -nf /etc/pf.conf && pfctl -f /etc/pf.conf"],
+    commands=[
+        (
+            "pfctl -nf /etc/pf.conf.new"
+            " && cp /etc/pf.conf.new /etc/pf.conf.tmp"
+            " && mv /etc/pf.conf.tmp /etc/pf.conf"
+            " && pfctl -f /etc/pf.conf"
+        )
+    ],
     _if=pf_conf.did_change,
     _ignore_errors=False,
 )
