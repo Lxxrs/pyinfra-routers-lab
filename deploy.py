@@ -3,7 +3,7 @@
 from pyinfra import host
 from pyinfra.operations import files, pkg, server
 
-# Resolver
+# Resolver ---------------------------------------------------------------------------
 files.template(
     name="Configure resolver",
     src="templates/resolv.conf.j2",
@@ -11,7 +11,7 @@ files.template(
     mode="644",
 )
 
-# Packages
+# Packages ---------------------------------------------------------------------------
 packages = host.data.get("packages", [])
 if packages:
     pkg.packages(
@@ -20,7 +20,7 @@ if packages:
         present=True,
     )
 
-# Interfaces
+# Interfaces -------------------------------------------------------------------------
 for iface, cfg in host.data.get("interfaces", {}).items():
     iface_file = files.template(
         name=f"Setup interface {iface}",
@@ -37,7 +37,7 @@ for iface, cfg in host.data.get("interfaces", {}).items():
         _if=iface_file.did_change,
     )
 
-# IPv4 Forwarding
+# IPv4 Forwarding --------------------------------------------------------------------
 server.sysctl(
     name="Enable IPv4 forwarding",
     key="net.inet.ip.forwarding",
@@ -46,7 +46,7 @@ server.sysctl(
     persist_file="/etc/sysctl.conf",
 )
 
-# Packet Filter
+# Packet Filter ----------------------------------------------------------------------
 pf_conf = files.template(
     name="Render pf ruleset",
     src="templates/pf.conf.j2",
