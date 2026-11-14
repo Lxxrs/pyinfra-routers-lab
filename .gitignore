@@ -13,6 +13,7 @@ wheels/
 # Containerlab
 clab-*/
 *.clab.yml.bak
+*.clab.yml.annotations.json
 
 # pyinfra
 pyinfra-debug.log
