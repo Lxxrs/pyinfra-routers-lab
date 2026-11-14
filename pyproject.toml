@@ -3,6 +3,8 @@ name = "pyinfra-routers-lab"
 version = "0.3.0"
 description = "Reproducible lab that provisions OpenBSD routers with pyinfra on Containerlab"
 readme = "README.md"
+license = "ISC"
+license-files = ["LICENSE"]
 requires-python = ">=3.14"
 dependencies = [
     "pyinfra>=3.9.2",
