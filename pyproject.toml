@@ -1,16 +1,16 @@
 [project]
 name = "pyinfra-routers-lab"
 version = "0.2.1"
-description = "Add your description here"
+description = "Reproducible lab that provisions OpenBSD routers with pyinfra on Containerlab"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "git-cliff>=2.14.2",
     "pyinfra>=3.9.2",
 ]
 
 [dependency-groups]
 dev = [
+    "git-cliff>=2.14.2",
     "ruff>=0.15.22",
     "ty>=0.0.62",
 ]
