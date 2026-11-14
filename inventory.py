@@ -37,11 +37,13 @@ routers = (
                         "address": "192.168.1.1",
                         "netmask": "255.255.255.0",
                         "description": "LAN router1",
+                        "role": "lan",
                     },
                     "vio2": {
                         "address": "10.10.8.1",
                         "netmask": "255.255.255.252",
                         "description": "transit to router2",
+                        "role": "transit",
                         "routes": [
                             {"destination": "192.168.2.0/24", "gateway": "10.10.8.2"},
                         ],
@@ -57,11 +59,13 @@ routers = (
                         "address": "192.168.2.1",
                         "netmask": "255.255.255.0",
                         "description": "LAN router2",
+                        "role": "lan",
                     },
                     "vio2": {
                         "address": "10.10.8.2",
                         "netmask": "255.255.255.252",
                         "description": "transit to router1",
+                        "role": "transit",
                         "routes": [
                             {"destination": "192.168.1.0/24", "gateway": "10.10.8.1"},
                         ],

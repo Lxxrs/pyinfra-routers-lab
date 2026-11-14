@@ -1,7 +1,9 @@
 # deploy.py
 
+import ipaddress
+
 from pyinfra import host
-from pyinfra.operations import files, pkg, server
+from pyinfra.operations import bsdinit, files, pkg, server
 
 # Resolver ---------------------------------------------------------------------------
 files.template(
@@ -68,3 +70,49 @@ server.shell(
     _if=pf_conf.did_change,
     _ignore_errors=False,
 )
+
+# Unbound ----------------------------------------------------------------------------
+lan_addrs = []
+lan_nets = []
+for iface, cfg in host.data.get("interfaces", {}).items():
+    if cfg.get("role") == "lan":
+        lan_addrs.append(cfg["address"])
+        net = ipaddress.ip_network(f"{cfg['address']}/{cfg['netmask']}", strict=False)
+        lan_nets.append(str(net))
+
+if lan_addrs:
+    unbound_conf = files.template(
+        name="Configure unbound",
+        src="templates/unbound.conf.j2",
+        dest="/var/unbound/etc/unbound.conf.new",
+        mode="644",
+        listen_addresses=lan_addrs,
+        allow_nets=lan_nets,
+        forwarders=host.data.get("nameservers", ["10.0.0.3"]),
+    )
+
+    server.shell(
+        name="Validate and install unbound config",
+        commands=[
+            (
+                "unbound-checkconf /var/unbound/etc/unbound.conf.new"
+                " && cp /var/unbound/etc/unbound.conf.new /var/unbound/etc/unbound.conf.tmp"
+                " && mv /var/unbound/etc/unbound.conf.tmp /var/unbound/etc/unbound.conf"
+            )
+        ],
+        _if=unbound_conf.did_change,
+    )
+
+    bsdinit.service(
+        name="Enable unbound",
+        service="unbound",
+        running=True,
+        enabled=True,
+    )
+
+    bsdinit.service(
+        name="Restart unbound on change",
+        service="unbound",
+        restarted=True,
+        _if=unbound_conf.did_change,
+    )
